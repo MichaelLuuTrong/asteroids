@@ -4,7 +4,7 @@ import pygame
 
 class Player(CircleShape):
     rotation = 0
-    def __init__(self, x, y ):
+    def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
 
     
