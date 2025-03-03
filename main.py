@@ -23,8 +23,6 @@ def main():
     game_clock = pygame.time.Clock()
     dt = 0
     score = 0
-    time_per_point = 1 #seconds
-    point_timer = 0
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -36,6 +34,9 @@ def main():
     AsteroidField.containers = updatable
     Shot.containers = (updatable, drawable, shots)
 
+    n_min = 1
+    n_max = ASTEROID_KINDS
+    x = ASTEROID_KINDS
 
     asteroid_field = AsteroidField()
 
@@ -46,24 +47,26 @@ def main():
             if event.type == pygame.QUIT:
                 return
         screen.fill((0,0,0))
-        point_timer -= dt
-        if point_timer <= 0:
-            score += 1
-            point_timer = time_per_point
 
-        scoreboard = score_font.render(f"Score: {score}", False, (255, 255, 255))
+        scoreboard = score_font.render(f"Score: {int(score)}", False, (255, 255, 255))
         screen.blit(scoreboard, (20, 20))
 
         updatable.update(dt)
         for asteroid in asteroids:
             if asteroid.colliding(player_ship):
                 print("Game Over!")
-                print(f"Final Score: {score}")
+                print(f"Final Score: {int(score)}")
                 sys.exit()
             for shot in shots:
                 if asteroid.colliding(shot):
+                    score += (100 / ASTEROID_KINDS * 
+                        (ASTEROID_KINDS -
+                        (asteroid.radius // ASTEROID_MIN_RADIUS - 1) / (ASTEROID_KINDS - 1)
+                        * (ASTEROID_KINDS - 1)))
+                    # this formula gives score inversely proportional to the size of the asteroid
+                    # for example, if there are 5 sizes, the largest size will give 20 points and
+                    # the smallest size will give 100 points
                     asteroid.split()
-                    score += 3
                     pygame.sprite.Sprite.kill(shot)
         for sprite in drawable:
             sprite.draw(screen)
