@@ -7,39 +7,26 @@ from asteroidfield import AsteroidField
 from shot import Shot
 
 def main():
-    print("Starting Asteroids!")
-    print(f"Screen width: {SCREEN_WIDTH}")
-    print(f"Screen height: {SCREEN_HEIGHT}")
-
-
-
+    print(f"Starting Asteroids in a {SCREEN_WIDTH}x{SCREEN_HEIGHT} window...")
     pygame.init()
     pygame.font.init()
+
     score_font = pygame.font.SysFont('dejavuserif', 20)
-
-
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    
     game_clock = pygame.time.Clock()
-    dt = 0
-    score = 0
-
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
     shots = pygame.sprite.Group()
+    dt = 0
+    score = 0
     
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = updatable
     Shot.containers = (updatable, drawable, shots)
 
-    n_min = 1
-    n_max = ASTEROID_KINDS
-    x = ASTEROID_KINDS
-
     asteroid_field = AsteroidField()
-
     player_ship = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
 
     while True:
@@ -72,8 +59,6 @@ def main():
             sprite.draw(screen)
         pygame.display.flip()
         dt = (game_clock.tick(60)) / 1000
-
-
           
 if __name__ == "__main__":
     main()
