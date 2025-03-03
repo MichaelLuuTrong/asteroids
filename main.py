@@ -18,6 +18,9 @@ def main():
     
     game_clock = pygame.time.Clock()
     dt = 0
+    score = 0
+    time_per_point = 1 #seconds
+    point_timer = 0
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -39,14 +42,21 @@ def main():
             if event.type == pygame.QUIT:
                 return
         screen.fill((0,0,0))
+        point_timer -= dt
+        if point_timer <= 0:
+            score += 1
+            point_timer = time_per_point
+
         updatable.update(dt)
         for asteroid in asteroids:
             if asteroid.colliding(player_ship):
                 print("Game Over!")
+                print(f"FINAL SCORE: {score}!")
                 sys.exit()
             for shot in shots:
                 if asteroid.colliding(shot):
                     asteroid.split()
+                    score += 3
                     pygame.sprite.Sprite.kill(shot)
         for sprite in drawable:
             sprite.draw(screen)
