@@ -14,6 +14,10 @@ def main():
 
 
     pygame.init()
+    pygame.font.init()
+    score_font = pygame.font.SysFont('dejavuserif', 20)
+
+
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     
     game_clock = pygame.time.Clock()
@@ -47,11 +51,14 @@ def main():
             score += 1
             point_timer = time_per_point
 
+        scoreboard = score_font.render(f"Score: {score}", False, (255, 255, 255))
+        screen.blit(scoreboard, (20, 20))
+
         updatable.update(dt)
         for asteroid in asteroids:
             if asteroid.colliding(player_ship):
                 print("Game Over!")
-                print(f"FINAL SCORE: {score}!")
+                print(f"Final Score: {score}")
                 sys.exit()
             for shot in shots:
                 if asteroid.colliding(shot):
